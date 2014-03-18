@@ -259,9 +259,23 @@ class CandyStore extends CI_Controller {
 	}
 
     function administrator() {
-		$data['title']='Administrator Page';
-        $data['main']='administrator/administrator.php';
-		$this->load->view('template',$data);
+		
+		if ($this->session->userdata('logged_in')) {
+			$session_data = $this->session->userdata('logged_in');
+			if ($session_data['login'] === 'admin') {
+				$data['login'] = $session_data['login'];
+				$data['title']='Administrator Page';
+				$data['main']='administrator/administrator.php';
+				$this->load->view('template',$data);
+			} else {
+				redirect('candystore/home', 'refresh');
+			}
+		} else {
+			redirect('candystore/index', 'refresh');
+		}
+		
+		
+		
     }
 
     function users() {
