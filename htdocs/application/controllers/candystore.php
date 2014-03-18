@@ -80,12 +80,24 @@ class CandyStore extends CI_Controller {
 	}
 
     function products() {
-    		$this->load->model('product_model');
-    		$products = $this->product_model->getAll();
-    		$data['products']=$products;
-			$data['main']='product/list.php';
-			$data['title']='Products';
-    		$this->load->view('template',$data);
+		
+		if ($this->session->userdata('logged_in')) {
+			$session_data = $this->session->userdata('logged_in');
+			if ($session_data['login'] === 'admin') {
+				$this->load->model('product_model');
+				$products = $this->product_model->getAll();
+				$data['products']=$products;
+				$data['main']='product/list.php';
+				$data['title']='Products';
+				$this->load->view('template',$data);
+			} else {
+				redirect('candystore/home', 'refresh');
+			}
+		} else {
+			redirect('candystore/index', 'refresh');
+		}
+		
+
 
     }
 
@@ -279,12 +291,25 @@ class CandyStore extends CI_Controller {
     }
 
     function users() {
-        $this->load->model('customer_model');
-    	$customers = $this->customer_model->getAll();
-    	$data['customers']=$customers;
-		$data['title']='Users';
-		$data['main']='administrator/users.php';
-		$this->load->view('template',$data);
+		
+		if ($this->session->userdata('logged_in')) {
+			$session_data = $this->session->userdata('logged_in');
+			if ($session_data['login'] === 'admin') {
+				$this->load->model('customer_model');
+				$customers = $this->customer_model->getAll();
+				$data['customers']=$customers;
+				$data['title']='Users';
+				$data['main']='administrator/users.php';
+				$this->load->view('template',$data);
+			} else {
+				redirect('candystore/home', 'refresh');
+			}
+		} else {
+			redirect('candystore/index', 'refresh');
+		}
+		
+		
+
     }
 
     function deleteuser($id) {
@@ -298,11 +323,23 @@ class CandyStore extends CI_Controller {
     }
 
     function orders() {
-        $this->load->model('order_model');
-    	$orders = $this->order_model->getAll();
-    	$data['orders']=$orders;
-		$data['main']='administrator/orders.php';
-		$this->load->view('template',$data);
+		
+		if ($this->session->userdata('logged_in')) {
+			$session_data = $this->session->userdata('logged_in');
+			if ($session_data['login'] === 'admin') {
+				$this->load->model('order_model');
+				$orders = $this->order_model->getAll();
+				$data['orders']=$orders;
+				$data['main']='administrator/orders.php';
+				$this->load->view('template',$data);
+			} else {
+				redirect('candystore/home', 'refresh');
+			}
+		} else {
+			redirect('candystore/index', 'refresh');
+		}
+		
+
     }
 
     function deleteorder($id) {
