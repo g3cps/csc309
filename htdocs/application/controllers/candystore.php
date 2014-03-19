@@ -95,7 +95,7 @@ class CandyStore extends CI_Controller {
 				$products = $this->product_model->getAll();
 				$data['products']=$products;
 				$data['main']='home/list.php';
-				$data['title'] = 'Products';
+				$data['title'] = 'Products';			
 				$this->load->view('template', $data);
 			}
 		} else {
@@ -374,8 +374,30 @@ class CandyStore extends CI_Controller {
 		
 		if ($this->form_validation->run() == true) {
 			$order_item = Array();
-			$order_item[] = $this->input->get_post('order_id');
-			$order_item[] = $this->input->get_post('quantity');
+			$order_item[] = intval($this->input->get_post('product_id'));
+			$order_item[] = intval($this->input->get_post('quantity'));
+
+			if ($this->session->userdata('cart')) {
+				$newcart = $this->session->userdata('cart');
+				
+				$existed = false;
+				for ($i = 0; $i < count($newcart); $i++) {
+					if ($newcart[$i][0] == $order_item[0]) {
+						$existed = true;
+						$newcart[$i][1] = $newcart[$i][1] + $order_item[1];
+					}
+				}
+				
+				if ($existed === false) {
+					$newcart[] = $order_item;
+				}
+
+				$this->session->set_userdata('cart', $newcart);
+			} else {
+				$newcart = Array();
+				$newcart[] = $order_item;
+				$this->session->set_userdata('cart', $newcart);
+			}
 
 			redirect('candystore/products', 'refresh');
 		}
