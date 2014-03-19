@@ -1,2 +1,0 @@
-LogLevel debug 
-LoadModule rewrite_module /usr/lib/apache2/modules/mod_rewrite.so
