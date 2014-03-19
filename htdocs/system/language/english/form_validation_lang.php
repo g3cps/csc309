@@ -1,7 +1,7 @@
 <?php
 
 //custom error messages
-$lang['username_error']		= "The username is does not exit, please create a new account";
+$lang['username_error']		= "The username is does not exist, please create a new account";
 $lang['login_error']		= "Username and password did not match!";
 
 $lang['required']			= "The %s field is required.";
