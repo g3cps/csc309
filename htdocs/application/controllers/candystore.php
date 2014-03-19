@@ -91,7 +91,12 @@ class CandyStore extends CI_Controller {
 				$data['title']='Products';
 				$this->load->view('template',$data);
 			} else {
-				redirect('candystore/home', 'refresh');
+				$this->load->model('product_model');
+				$products = $this->product_model->getAll();
+				$data['products']=$products;
+				$data['main']='home/list.php';
+				$data['title'] = 'Products';
+				$this->load->view('template', $data);
 			}
 		} else {
 			redirect('candystore/index', 'refresh');
