@@ -71,6 +71,36 @@ class Checkout extends CI_Controller {
 		}
 	}
 	
+	function finalize() {
+		$data['main']='checkout/finalize.php';
+		$data['title'] = 'Finalize Order';
+		$this->load->view('template', $data);
+	}
+	
+	function finalizeOrder() {
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('creditcard_number', 'Credit Card Number', 'required|integer|exact_length[16]');
+		$this->form_validation->set_rules('creditcard_month', 'Credit Card Expiry Month', 'required|integer|greater_than[0]|less_than[13]');
+		$this->form_validation->set_rules('creditcard_year', 'Credit Card Expiry Year', 'required|integer|greater_than[2013]');
+
+		if($this->form_validation->run() == FALSE) {
+			$data['title']='Finalize Order';
+			$data['main']='checkout/finalize.php';
+			$data['errormsg'] = validation_errors();
+			$this->load->view('template',$data);
+		} else {
+			if ($this->input->post('creditcard_year') == date("Y") &&
+			    $this->input->post('creditcard_month') <= date("m")) {
+					$data['title']='Finalize Order';
+					$data['main']='checkout/finalize.php';
+					$data['errormsg'] = 'You must use a non-expired credit card.';
+					$this->load->view('template',$data);
+			} else {
+				redirect('checkout/index', 'refresh');
+			}
+		}
+	}
+	
 	function send(){
 		$config = Array(
 			'protocol' => 'smtp',
