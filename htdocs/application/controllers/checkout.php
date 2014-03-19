@@ -98,13 +98,25 @@ class Checkout extends CI_Controller {
 			} else {
 				
 				$session_data = $this->session->userdata('logged_in');
-				$this->load->model('order_model');
+				
 
+				$this->load->model('product_model');
+				$products = $this->product_model->getAll();
+				$total = 0;
+				foreach ($products as $product){
+					foreach ($this->session->userdata('cart') as $added){
+						if ($product->id == $added[0]) {
+							$total = $total + $added[1] * $product->price;
+						}
+					}
+				}
+
+				$this->load->model('order_model');
 				$order = new Order();
 				$order->customer_id = $session_data['id'];
 				$order->order_date = date('Y-m-d H:i:s');
 				$order->order_time = time();
-				$order->total = 1; // FIX THIS
+				$order->total = $total;
 				$order->creditcard_number = strval($this->input->post('creditcard_number'));
 				$order->creditcard_month = $this->input->post('creditcard_month');
 				$order->creditcard_year = $this->input->post('creditcard_year');
@@ -117,20 +129,15 @@ class Checkout extends CI_Controller {
 				foreach ($products as $product){
 					foreach ($this->session->userdata('cart') as $added){
 						if ($product->id == $added[0]){
-							$this->load->model('orderItem_model');
+							$this->load->model('orderitem_model');
 							$order_item = new OrderItem();
 							$order_item->order_id = $orderid;
 							$order_item->product_id = $product->id;
 							$quantity = $added[1];
-							$this->orderItem_model->insert($order_item);
+							$this->orderitem_model->insert($order_item);
 						}
 					}
 				}
-				
-				
-				
-				
-				
 				
 				redirect('checkout/index', 'refresh');
 			}
