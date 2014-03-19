@@ -28,6 +28,7 @@
 		echo form_submit('submit', 'Update');
 		echo form_close();
 		echo "<p>Total: $$total </p>";
+		echo "<p>" . anchor('checkout/finalize','Finalize Order') . "</p>";
 	} else { //Nothing is in the cart
 		echo "<p>Nothing in the cart :(</p>";
 	}
