@@ -107,7 +107,9 @@ class CandyStore extends CI_Controller {
     }
 
     function newForm() {
-	    	$this->load->view('product/newForm.php');
+			$data['title']='New Product';
+			$data['main']='product/newForm.php';
+	    	$this->load->view('template.php', $data);
     }
     
 	function create() {
@@ -137,11 +139,14 @@ class CandyStore extends CI_Controller {
 		else {
 			if ( !$fileUploadSuccess) {
 				$data['fileerror'] = $this->upload->display_errors();
-				$this->load->view('product/newForm.php',$data);
+				$data['title']='New Product';
+				$data['main']='product/newForm.php';
+				$this->load->view('template.php',$data);
 				return;
 			}
-			
-			$this->load->view('product/newForm.php');
+			$data['title']='New Product';
+			$data['main']='product/newForm.php';
+			$this->load->view('template.php', $data);
 		}	
 	}
 	
@@ -149,14 +154,18 @@ class CandyStore extends CI_Controller {
 		$this->load->model('product_model');
 		$product = $this->product_model->get($id);
 		$data['product']=$product;
-		$this->load->view('product/read.php',$data);
+		$data['title']='Read';
+		$data['main']='product/read.php';
+		$this->load->view('template.php',$data);
 	}
 	
 	function editForm($id) {
 		$this->load->model('product_model');
 		$product = $this->product_model->get($id);
 		$data['product']=$product;
-		$this->load->view('product/editForm.php',$data);
+		$data['title']='Edit Product';
+		$data['main']='product/editForm.php';
+		$this->load->view('template.php',$data);
 	}
 	
 	function update($id) {
@@ -184,7 +193,9 @@ class CandyStore extends CI_Controller {
 			$product->description = set_value('description');
 			$product->price = set_value('price');
 			$data['product']=$product;
-			$this->load->view('product/editForm.php',$data);
+			$data['title']='Edit Product';
+			$data['main']='product/editForm.php';
+			$this->load->view('template.php',$data);
 		}
 	}
     	
