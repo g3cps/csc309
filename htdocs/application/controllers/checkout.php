@@ -140,7 +140,7 @@ class Checkout extends CI_Controller {
 					}
 				}
 				
-				redirect('checkout/index', 'refresh');
+				redirect('checkout/send', 'refresh');
 			}
 		}
 	}
