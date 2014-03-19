@@ -1,7 +1,7 @@
 <h2>Product Table</h2>
 <?php  	  
 		echo "<table>";
-		echo "<tr><th>Name</th><th>Description</th><th>Price</th><th>Quantity</th></tr>";
+		echo "<tr><th>Name</th><th>Description</th><th>Price</th><th/><th>Quantity</th></tr>";
 		
 		foreach ($products as $product) {
 			echo "<tr>";
