@@ -28,7 +28,7 @@ class Checkout extends CI_Controller {
 		if ($this->session->userdata('cart') && sizeof($this->session->userdata('cart')) > 0) {
 			$this->load->library('form_validation');
 			foreach($this->session->userdata('cart') as $item){
-				$this->form_validation->set_rules((String)$item[0],(String)$item[0],'is_numeric');
+				$this->form_validation->set_rules((String)$item[0],(String)$item[0],'integer|greater_than[-1]');
 			}
 		} else {
 			$this->load->view('template',$data);
@@ -61,7 +61,12 @@ class Checkout extends CI_Controller {
 			$this->session->set_userdata('cart', $cart);
 			redirect('checkout/index', 'refresh');
 		} else {
-			$data['toprint'] = "<div id='errormsg'><p>Please input number only!</p></div>";
+			$this->load->model('product_model');
+			$data['main']='checkout/cart.php';
+			$data['toprint'] = "<p>Here is your cart:</p>";
+			$data['products'] = $this->product_model->getAll();
+			$data['title']='Checkout Shopping Cart';
+			$data['errormsg'] = "<p>Please input number only with no decimal place!</p>";
 			$this->load->view('template',$data);
 		}
 	}

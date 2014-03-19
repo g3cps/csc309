@@ -21,7 +21,11 @@ class CandyStore extends CI_Controller {
 	
 	function index() {
 		$data['title']='Candystore';
-		$data['main']='customer/login.php';
+		if ($this->session->userdata('logged_in')){
+			redirect('candystore/home', 'refresh');
+		} else {
+			$data['main']='customer/login.php';
+		}
 		$this->load->view('template',$data);
 	}
 	
@@ -64,6 +68,7 @@ class CandyStore extends CI_Controller {
 	
 	function logout() {
 		$this->session->unset_userdata('logged_in');
+		$this->session->unset_userdata('cart');
 		redirect('candystore/index', 'refresh');
 	}
 	
