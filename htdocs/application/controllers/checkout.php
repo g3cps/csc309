@@ -81,18 +81,72 @@ class Checkout extends CI_Controller {
 			'mailtype'  => 'html'
 		);
 		
-		$this->load->library('email', $config);
-		$this->email->set_newline('\r\n');
+		$message = '';
+		$total = 0;
 		
-		$this->email->from('worldbestcandy@gmail.com ', "Candy Shop");
-		$this->email->to('worldbestcandy@gmail.com ');
-		$this->email->subject("Testing Email");
-		$this->email->message("IT IS WORKING!");
-	
-		if ($this->email->send()){
-			echo "<p> IT IS SENT! </p>";
-		} else {
-			show_error($this->email->print_debugger());
+		if ($this->session->userdata('logged_in') && 
+			$this->session->userdata('cart') && 
+			sizeof($this->session->userdata('cart')) > 0){
+			
+			$this->load->model('product_model');
+			$products = $this->product_model->getAll();
+			foreach ($products as $product){
+				foreach ($this->session->userdata('cart') as $added){
+					if ($product->id == $added[0]){
+						$message = $message . "<p>" . $product->name . 
+							" - $" .  $product->price . " each x" . 
+							$added[1] . "</p>";
+						$total += $added[1] * $product->price;
+						break;
+					}
+				}
+			}
+			
+			$email = '';
+			$name = '';
+			
+			//Get customer's information
+			$this->load->model('customer_model');
+			$customers = $this->customer_model->getAll();
+			$user = $this->session->userdata('logged_in');
+			foreach ($customers as $customer){
+				if ($user['id'] == $customer->id){
+					$email = $customer->email;
+					$name = $customer->first . " " . $customer->last;
+					break;
+				}
+			}
+			
+			$message = "<p>To: " . $name . "</p>" . 
+						$message . "<p>Total: $" . $total . "</p>" .
+						"<p>Thank you for your business,<br>World's Best Candy</p>";
+			
+			$this->load->library('email', $config);
+			$this->email->set_newline('\r\n');
+			$this->email->from('worldbestcandy@gmail.com ', "Candy Shop");
+			$this->email->to($email);
+			$this->email->set_mailtype("html");
+			$this->email->subject("CandyShop - Thank You for purchasing!");
+			$this->email->message($message);
+		
+			if ($this->email->send()){
+				$data['main']='checkout/receipt.php';
+				$data['receipt'] = $message;
+				$data['head']= "<h1>Receipt:</h1><br><h2>Purchase is complete!<br>A copy of the receipt is sent to: $email </h2>";
+				$data['title'] = "Receipt";
+				//Remove items in cart since purchase has finalized
+				$this->session->unset_userdata('cart');
+				$this->load->view('template',$data);
+			} else {
+				$data['main']='checkout/receipt.php';
+				$data['receipt'] = '';
+				$data['head']= "<h1>Receipt:</h1>";
+				$data['title'] = "Receipt";
+				$data['errormsg'] = "There was an error sending the receipt";
+				//Remove items in cart since purchase has finalized
+				$this->session->unset_userdata('cart');
+				$this->load->view('template',$data);
+			}
 		}
 	}
 }

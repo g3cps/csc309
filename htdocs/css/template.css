@@ -63,4 +63,7 @@
 	height: 75px;
 }
 
+@media print {
+   .noprint { display: none; }
+}
 

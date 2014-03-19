@@ -22,6 +22,7 @@
 					echo form_label($product->name . " - $" . $product->price . " each");
 					echo form_input($added[0],$added[1]);
 					$total += $added[1] * $product->price;
+					break;
 				}
 			}
 		}
