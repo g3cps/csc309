@@ -12,7 +12,7 @@
 				
 			echo "<td>";
 			echo form_open_multipart('candystore/addToCart');
-			echo form_hidden('id', $product->id);
+			echo form_hidden('product_id', $product->id);
 			echo form_input('quantity',set_value('quantity'),"required");
 			echo form_submit('submit', 'Add To Cart');
 			echo form_close();

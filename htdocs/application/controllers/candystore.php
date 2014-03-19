@@ -368,5 +368,26 @@ class CandyStore extends CI_Controller {
 		redirect('candystore/orders', 'refresh');
     }
     
+    function addToCart() {
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('quantity','Quantity','required|integer');
+		
+		if ($this->form_validation->run() == true) {
+			$order_item = Array();
+			$order_item[] = $this->input->get_post('order_id');
+			$order_item[] = $this->input->get_post('quantity');
+
+			redirect('candystore/products', 'refresh');
+		}
+		else {
+			$this->load->model('product_model');
+			$products = $this->product_model->getAll();
+			$data['products']=$products;
+			$data['main' ]= 'home/list.php';
+			$data['errormsg'] = validation_errors();
+    		$this->load->view('template',$data);
+		}
+	}
+    
 }
 
