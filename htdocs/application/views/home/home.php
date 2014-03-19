@@ -6,5 +6,5 @@
 </style>
 
 <p>Welcome <?php echo $login; ?></p>
-<p><a href="candystore/logout">Logout</a></p>
+<p><a href="logout">Log Out</a></p>
 
