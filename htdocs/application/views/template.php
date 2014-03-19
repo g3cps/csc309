@@ -6,10 +6,10 @@
 <link rel='stylesheet' href="<?= base_url(); ?>css/template.css">
 </head>
 <body>
-	<div id='header'>
+	<div class="noprint" id='header'>
     	<?php $this->load->view('header');?>
     </div>
-    <div id='nav'>
+    <div class="noprint" id='nav'>
     	<ul>
     		<li><?php echo "<p>" . anchor('candystore/index','Home') . "</p>";?></li>
             <li><?php echo "<p>" . anchor('candystore/products','Products') . "</p>";?></li>
@@ -17,7 +17,7 @@
             <li><?php echo "<p>" . anchor('candystore/administrator','Admin') . "</p>";?></li>
     	</ul>
     </div>
-	<div id='main'>
+	<div class="print" id='main'>
 		<?php 
 		$this->load->view($main);
 		if (isset($errormsg))
