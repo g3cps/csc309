@@ -14,25 +14,54 @@ class Checkout extends CI_Controller {
 		
 		if ($this->session->userdata('logged_in')) {
 			//There is something in the cart
-			if ($this->session->userdata('cart')){
-				$this->load->model('product_model');
-				$products = $this->product_model->getAll();
-				foreach ($products as $product){
-					foreach ($this->session->userdata('cart') as $added){
-						if ($product->id == $added[0]){
-							$data['toprint'] = $data['toprint'] . 
-							"<img id='incart' src='" . base_url() . 
-							"images/product/" . $product->photo_url . 
-							"'></img><p>Qty: " . $added[1] . "</p>";
-						}
-					}
-				}
-			} else { //Nothing is in the cart
-				$data['toprint'] = "<p>Nothing in the cart :(</p>";
-			}
+			$this->load->model('product_model');
+			$data['toprint'] = "<p>Here is your cart:</p>";
+			$data['products'] = $this->product_model->getAll();
 			$this->load->view('template',$data);
 		} else { //Not logged in yet
 			$data['toprint'] = "<p>Please Login to view cart</p>";
+			$this->load->view('template',$data);
+		}
+	}
+	
+	function changeqty(){
+		if ($this->session->userdata('cart') && sizeof($this->session->userdata('cart')) > 0) {
+			$this->load->library('form_validation');
+			foreach($this->session->userdata('cart') as $item){
+				$this->form_validation->set_rules((String)$item[0],(String)$item[0],'is_numeric');
+			}
+		} else {
+			$this->load->view('template',$data);
+		}
+		
+		if ($this->form_validation->run() == true) {
+			//Update quantity
+			$toremove = array();
+			$cart = $this->session->userdata('cart');
+			foreach($this->session->userdata('cart') as $item){
+				$qty = $this->input->get_post($item[0]);
+				if ($qty >= 0){
+					for ($i = 0; $i < sizeof($cart); $i++) {
+						if (($qty > 0) && ($cart[$i][0] == $item[0])){
+							$cart[$i][1] = $qty;
+						} elseif (($qty == 0) && ($cart[$i][0] == $item[0])){
+							array_push($toremove, $i); //remember what to remove
+						}
+					}
+				}
+			}
+			//Remove 0 quantity items
+			$offset = 0;
+			foreach($toremove as $index){			
+				unset($cart[$index + $offset]);
+				$cart = array_values($cart);
+				$offset--;
+			}
+			//Set cart to updated cart in session
+			$this->session->set_userdata('cart', $cart);
+			redirect('checkout/index', 'refresh');
+		} else {
+			$data['toprint'] = "<div id='errormsg'><p>Please input number only!</p></div>";
 			$this->load->view('template',$data);
 		}
 	}

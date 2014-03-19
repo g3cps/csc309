@@ -13,6 +13,7 @@
     	<ul>
     		<li><?php echo "<p>" . anchor('candystore/index','Home') . "</p>";?></li>
             <li><?php echo "<p>" . anchor('candystore/products','Products') . "</p>";?></li>
+            <li><?php echo "<p>" . anchor('checkout/index','View Cart / Check Out') . "</p>";?></li>
             <li><?php echo "<p>" . anchor('candystore/administrator','Admin') . "</p>";?></li>
     	</ul>
     </div>
