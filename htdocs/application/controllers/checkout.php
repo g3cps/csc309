@@ -115,7 +115,7 @@ class Checkout extends CI_Controller {
 				$order = new Order();
 				$order->customer_id = $session_data['id'];
 				$order->order_date = date('Y-m-d H:i:s');
-				$order->order_time = time();
+				$order->order_time = date('H:i:s', strtotime('now'));
 				$order->total = $total;
 				$order->creditcard_number = strval($this->input->post('creditcard_number'));
 				$order->creditcard_month = $this->input->post('creditcard_month');
@@ -128,13 +128,15 @@ class Checkout extends CI_Controller {
 				
 				foreach ($products as $product){
 					foreach ($this->session->userdata('cart') as $added){
-						if ($product->id == $added[0]){
+						if ($product->id == $added[0]) {
+							
 							$this->load->model('orderitem_model');
 							$order_item = new OrderItem();
 							$order_item->order_id = $orderid;
 							$order_item->product_id = $product->id;
 							$quantity = $added[1];
 							$this->orderitem_model->insert($order_item);
+							
 						}
 					}
 				}
