@@ -11,10 +11,11 @@
 			echo "<td><img src='" . base_url() . "images/product/" . $product->photo_url . "' width='100px' /></td>";
 				
 			echo "<td>";
+			echo form_open_multipart('candystore/addToCart');
+			echo form_hidden('id', $product->id);
 			echo form_input('quantity',set_value('quantity'),"required");
-			echo "</td>";
-			echo "<td>";
 			echo form_submit('submit', 'Add To Cart');
+			echo form_close();
 			echo "</td>";
 			echo "</tr>";
 		}
