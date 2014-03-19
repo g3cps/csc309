@@ -1,5 +1,5 @@
 <?php
-class OrderItem_model extends CI_Model {
+class Orderitem_model extends CI_Model {
 
 	function getAll()
 	{  
@@ -18,7 +18,7 @@ class OrderItem_model extends CI_Model {
 		return $this->db->delete("order_item",array('id' => $id ));
 	}
 	
-	function insert($orderItem) {
+	function insert($orderItem) {	
 		return $this->db->insert("order_item", array('order_id' => $orderItem->order_id,
 				                                  'product_id' => $orderItem->product_id,
 												  'quantity' => $orderItem->quantity));
