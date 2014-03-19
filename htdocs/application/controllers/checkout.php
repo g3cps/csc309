@@ -134,9 +134,8 @@ class Checkout extends CI_Controller {
 							$order_item = new OrderItem();
 							$order_item->order_id = $orderid;
 							$order_item->product_id = $product->id;
-							$quantity = $added[1];
-							$this->orderitem_model->insert($order_item);
-							
+							$order_item->quantity = $added[1];
+							$this->orderitem_model->insert($order_item);	
 						}
 					}
 				}
