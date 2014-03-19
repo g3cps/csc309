@@ -96,6 +96,42 @@ class Checkout extends CI_Controller {
 					$data['errormsg'] = 'You must use a non-expired credit card.';
 					$this->load->view('template',$data);
 			} else {
+				
+				$session_data = $this->session->userdata('logged_in');
+				$this->load->model('order_model');
+
+				$order = new Order();
+				$order->customer_id = $session_data['id'];
+				$order->order_date = date('Y-m-d H:i:s');
+				$order->order_time = time();
+				$order->total = 1; // FIX THIS
+				$order->creditcard_number = strval($this->input->post('creditcard_number'));
+				$order->creditcard_month = $this->input->post('creditcard_month');
+				$order->creditcard_year = $this->input->post('creditcard_year');
+				$orderid = $this->order_model->insert($order);
+				
+				
+				$this->load->model('product_model');
+				$products = $this->product_model->getAll();
+				
+				foreach ($products as $product){
+					foreach ($this->session->userdata('cart') as $added){
+						if ($product->id == $added[0]){
+							$this->load->model('orderItem_model');
+							$order_item = new OrderItem();
+							$order_item->order_id = $orderid;
+							$order_item->product_id = $product->id;
+							$quantity = $added[1];
+							$this->orderItem_model->insert($order_item);
+						}
+					}
+				}
+				
+				
+				
+				
+				
+				
 				redirect('checkout/index', 'refresh');
 			}
 		}
