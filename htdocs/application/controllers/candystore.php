@@ -412,6 +412,7 @@ class CandyStore extends CI_Controller {
 			$products = $this->product_model->getAll();
 			$data['products']=$products;
 			$data['main' ]= 'home/list.php';
+			$data['title' ]= 'Products';
 			$data['errormsg'] = validation_errors();
     		$this->load->view('template',$data);
 		}
