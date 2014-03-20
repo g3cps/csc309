@@ -121,7 +121,7 @@ class CandyStore extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('name','Name','required|is_unique[product.name]');
 		$this->form_validation->set_rules('description','Description','required');
-		$this->form_validation->set_rules('price','Price','required');
+		$this->form_validation->set_rules('price','Price','required|greater_than[0]');
 		
 		$fileUploadSuccess = $this->upload->do_upload();
 		
@@ -138,8 +138,8 @@ class CandyStore extends CI_Controller {
 			
 			$this->product_model->insert($product);
 
-			//Then we redirect to the index page again
-			redirect('candystore/index', 'refresh');
+			//Then we redirect to the index products again
+			redirect('candystore/products', 'refresh');
 		}
 		else {
 			if ( !$fileUploadSuccess) {
@@ -177,7 +177,7 @@ class CandyStore extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('name','Name','required');
 		$this->form_validation->set_rules('description','Description','required');
-		$this->form_validation->set_rules('price','Price','required');
+		$this->form_validation->set_rules('price','Price','required|greater_than[0]');
 		
 		if ($this->form_validation->run() == true) {
 			$product = new Product();
@@ -188,8 +188,8 @@ class CandyStore extends CI_Controller {
 			
 			$this->load->model('product_model');
 			$this->product_model->update($product);
-			//Then we redirect to the index page again
-			redirect('candystore/index', 'refresh');
+			//Then we redirect to the product page again
+			redirect('candystore/products', 'refresh');
 		}
 		else {
 			$product = new Product();
@@ -210,8 +210,8 @@ class CandyStore extends CI_Controller {
 		if (isset($id)) 
 			$this->product_model->delete($id);
 		
-		//Then we redirect to the index page again
-		redirect('candystore/index', 'refresh');
+		//Then we redirect to the products page again
+		redirect('candystore/products', 'refresh');
 	}
     
     function login() {		
