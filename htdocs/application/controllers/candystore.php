@@ -352,6 +352,7 @@ class CandyStore extends CI_Controller {
 				$orders = $this->order_model->getAll();
 				$data['orders']=$orders;
 				$data['main']='administrator/orders.php';
+				$data['title']='Orders';
 				$this->load->view('template',$data);
 			} else {
 				redirect('candystore/home', 'refresh');

@@ -221,6 +221,8 @@ class Checkout extends CI_Controller {
 				$this->session->unset_userdata('cart');
 				$this->load->view('template',$data);
 			}
+		} else { //Illegal access to send page
+			redirect('candystore/index', 'refresh');
 		}
 	}
 }
