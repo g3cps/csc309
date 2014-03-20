@@ -376,7 +376,7 @@ class CandyStore extends CI_Controller {
     
     function addToCart() {
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('quantity','Quantity','required|integer');
+		$this->form_validation->set_rules('quantity','Quantity','required|integer|greater_than[0]');
 		
 		if ($this->form_validation->run() == true) {
 			$order_item = Array();
