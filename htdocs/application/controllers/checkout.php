@@ -66,7 +66,7 @@ class Checkout extends CI_Controller {
 			$data['toprint'] = "<p>Here is your cart:</p>";
 			$data['products'] = $this->product_model->getAll();
 			$data['title']='Checkout Shopping Cart';
-			$data['errormsg'] = "<p>Please input number only with no decimal place!</p>";
+			$data['errormsg'] = "<p>Please input number at least 0 with no decimal place!</p>";
 			$this->load->view('template',$data);
 		}
 	}
